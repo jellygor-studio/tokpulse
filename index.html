@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TokPulse — Native Token Speed, Cache Savings &amp; Diagnostics for Antigravity</title>
+    <meta
+      name="description"
+      content="Real-time tok/s throughput, prompt-cache savings calculator, prefix cache-drop diagnostics, project cost billing, and CSV/Markdown report export — built natively as a local-first MCP App."
+    />
+    <link rel="stylesheet" href="./styles.css?v=mwx1llxu" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="container nav-inner">
+        <a href="#" class="logo-link">
+          <svg width="28" height="28" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+            <rect x="6" y="6" width="116" height="116" rx="28" fill="#0F172A" stroke="#38BDF8" stroke-opacity="0.35" stroke-width="3" />
+            <path d="M22 68H40L50 36L64 92L77 54L86 68H106" stroke="#38BDF8" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="106" cy="68" r="7" fill="#34D399" />
+          </svg>
+          <span class="logo-text">TokPulse</span>
+          <span class="pill-ver">v1.0</span>
+        </a>
+
+        <nav class="nav-links">
+          <a href="#features" data-i18n="nav.features">Features</a>
+          <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+          <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button type="button" id="langToggle" class="ghost-btn">中文 / EN</button>
+          <button type="button" id="themeToggle" class="ghost-btn" aria-label="Toggle theme">Theme</button>
+          <a id="navBuyBtn" href="#pricing" class="btn-primary btn-sm" data-i18n="nav.getPro">Get Pro</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero container">
+        <div class="hero-badge">
+          <span class="dot-live"></span>
+          <span data-i18n="hero.badge">Built natively as an MCP App for Antigravity v2.34+</span>
+        </div>
+
+        <h1 class="hero-title" data-i18n="hero.title">
+          See every token, speed burst, and dollar your prompt cache saves.
+        </h1>
+
+        <p class="hero-sub" data-i18n="hero.sub">
+          Real-time tok/s speed, exact cache hit rate, prefix cache-drop diagnostics, and per-project cost billing — 100% local, zero debugger flags, survives every host upgrade.
+        </p>
+
+        <div class="hero-cta">
+          <div class="install-box">
+            <code id="installCmd">agy plugin install https://github.com/tokpulse/tokpulse</code>
+            <button type="button" id="copyInstallBtn" class="copy-btn" data-i18n="hero.copy">Copy</button>
+          </div>
+          <div class="hero-btn-row">
+            <a href="#pricing" class="btn-primary" data-i18n="hero.ctaPro">Unlock Pro — $10.99 Early Bird</a>
+            <a id="githubLink" href="https://github.com/jellygor-studio/tokpulse" target="_blank" rel="noreferrer" class="btn-secondary" data-i18n="hero.ctaGithub">View on GitHub</a>
+          </div>
+        </div>
+
+        <!-- Interactive Dashboard Mockup -->
+        <div class="demo-frame">
+          <div class="demo-bar">
+            <div class="demo-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="demo-tabs" role="tablist">
+              <button type="button" class="demo-tab active" data-demo-tab="live" data-i18n="demo.tabLive">Live Speed</button>
+              <button type="button" class="demo-tab" data-demo-tab="billing" data-i18n="demo.tabBilling">Project Billing</button>
+              <button type="button" class="demo-tab" data-demo-tab="diag" data-i18n="demo.tabDiag">Cache Diagnostics</button>
+            </div>
+            <div class="demo-scope" data-i18n="demo.scope">All Sessions · Hooks Live</div>
+          </div>
+
+          <!-- Panel 1: Live -->
+          <div class="demo-panel active" id="panel-live">
+            <div class="mock-grid-2">
+              <div class="mock-card">
+                <div class="mock-card-head">
+                  <span class="mock-card-title" data-i18n="demo.latestSpeed">Global Latest Speed</span>
+                  <div class="mock-seg">
+                    <button type="button" class="mock-seg-btn" data-visual="wave" title="Wave">~</button>
+                    <button type="button" class="mock-seg-btn active" data-visual="lion" title="Pixel Lion">
+                      <svg width="14" height="12" viewBox="0 0 14 12" shapeRendering="crispEdges">
+                        <rect x="3" y="0" width="8" height="2" fill="#B45309" />
+                        <rect x="1" y="2" width="12" height="7" fill="#C2590A" />
+                        <rect x="2" y="9" width="10" height="2" fill="#B45309" />
+                        <rect x="3" y="3" width="8" height="6" fill="#FBBF24" />
+                        <rect x="4" y="5" width="1" height="2" fill="#1E293B" />
+                        <rect x="9" y="5" width="1" height="2" fill="#1E293B" />
+                        <rect x="6" y="7" width="2" height="1" fill="#92400E" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="mock-hero-row">
+                  <div>
+                    <span class="mock-big">142.8</span>
+                    <span class="mock-unit">tok/s</span>
+                  </div>
+                  <div id="demoVisualLion" class="lion-stage">
+                    <svg width="96" height="48" viewBox="0 0 48 24" shapeRendering="crispEdges">
+                      <rect x="3" y="22" width="42" height="1" fill="currentColor" opacity="0.2" />
+                      <g class="lion-bob">
+                        <rect x="16" y="1" width="14" height="2" fill="#B45309" />
+                        <rect x="13" y="3" width="20" height="11" fill="#C2590A" />
+                        <rect x="12" y="5" width="22" height="7" fill="#D97706" />
+                        <rect x="15" y="14" width="16" height="2" fill="#B45309" />
+                        <rect x="14" y="2" width="3" height="3" fill="#F59E0B" />
+                        <rect x="29" y="2" width="3" height="3" fill="#F59E0B" />
+                        <rect x="16" y="4" width="14" height="10" fill="#FBBF24" />
+                        <rect x="19" y="10" width="8" height="3" fill="#FEF3C7" />
+                        <rect x="18" y="7" width="2" height="2" fill="#1E293B" />
+                        <rect x="26" y="7" width="2" height="2" fill="#1E293B" />
+                        <rect x="18" y="7" width="1" height="1" fill="#FFFFFF" />
+                        <rect x="26" y="7" width="1" height="1" fill="#FFFFFF" />
+                        <rect x="22" y="10" width="2" height="1" fill="#92400E" />
+                        <rect x="17" y="16" width="12" height="5" fill="#F59E0B" />
+                        <rect x="20" y="16" width="6" height="4" fill="#FEF3C7" opacity="0.9" />
+                        <rect x="29" y="17" width="4" height="1" fill="#F59E0B" />
+                        <rect x="33" y="15" width="1" height="2" fill="#F59E0B" />
+                        <rect x="33" y="13" width="3" height="2" fill="#B45309" />
+                      </g>
+                      <g class="lion-paw">
+                        <rect x="17" y="20" width="3" height="2" fill="#FDE68A" />
+                        <rect x="26" y="20" width="3" height="2" fill="#FDE68A" />
+                        <rect x="5" y="9" width="4" height="1" fill="#F59E0B" />
+                        <rect x="3" y="12" width="6" height="1" fill="#38BDF8" opacity="0.8" />
+                        <rect x="38" y="8" width="4" height="1" fill="#34D399" />
+                      </g>
+                    </svg>
+                  </div>
+                  <div id="demoVisualWave" class="lion-stage hidden">
+                    <svg width="136" height="44" viewBox="0 0 136 44">
+                      <path d="M2 34 L22 26 L42 30 L62 18 L82 22 L102 10 L122 14 L132 8" fill="none" stroke="#38BDF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                      <circle cx="132" cy="8" r="3.5" fill="#34D399" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="mock-divider"></div>
+                <div class="mock-3col">
+                  <div>
+                    <div class="mock-label" data-i18n="demo.avg">Global Avg</div>
+                    <div class="mock-val">74.2 <span>tok/s</span></div>
+                  </div>
+                  <div>
+                    <div class="mock-label" data-i18n="demo.turn">Turn Time</div>
+                    <div class="mock-val">4.6s</div>
+                  </div>
+                  <div>
+                    <div class="mock-label" data-i18n="demo.peak">Global Peak</div>
+                    <div class="mock-val">318.0 <span>tok/s</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mock-card">
+                <div class="mock-card-head">
+                  <span class="mock-card-title" data-i18n="demo.savingsTitle">Prompt Cache Impact</span>
+                  <span class="tag-ok" data-i18n="demo.hitTag">91.5% Hit</span>
+                </div>
+                <div class="mock-savings-val">$1,228.56</div>
+                <div class="mock-label" data-i18n="demo.savingsSub">Estimated API input cost saved via prefix caching</div>
+                <div class="mock-bar">
+                  <div style="width: 82%; background: #10B981;"></div>
+                  <div style="width: 11%; background: #3B82F6;"></div>
+                  <div style="width: 7%; background: #8B5CF6;"></div>
+                </div>
+                <div class="mock-3col" style="margin-top: 12px;">
+                  <div>
+                    <div class="mock-label" data-i18n="demo.cacheRead">Cache Read</div>
+                    <div class="mock-val">812.4M</div>
+                  </div>
+                  <div>
+                    <div class="mock-label" data-i18n="demo.uncached">Uncached</div>
+                    <div class="mock-val">75.2M</div>
+                  </div>
+                  <div>
+                    <div class="mock-label" data-i18n="demo.output">Output</div>
+                    <div class="mock-val">18.9M</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2: Billing -->
+          <div class="demo-panel" id="panel-billing">
+            <div class="mock-card">
+              <div class="mock-card-head">
+                <span class="mock-card-title" data-i18n="demo.billingHead">Project Cost Breakdown (30d)</span>
+                <span class="tag-accent">CSV / Markdown Export</span>
+              </div>
+              <table class="mock-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="demo.colProj">Project</th>
+                    <th class="num" data-i18n="demo.colTokens">Tokens</th>
+                    <th class="num" data-i18n="demo.colHit">Cache Hit</th>
+                    <th class="num" data-i18n="demo.colEst">Est. Cost</th>
+                    <th class="num" data-i18n="demo.colSaved">Saved</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>web-redesign</td>
+                    <td class="num">428.1M</td>
+                    <td class="num">92.4%</td>
+                    <td class="num">$167.51</td>
+                    <td class="num ok">$667.38</td>
+                  </tr>
+                  <tr>
+                    <td>ios-app-suite</td>
+                    <td class="num">214.6M</td>
+                    <td class="num">89.8%</td>
+                    <td class="num">$89.49</td>
+                    <td class="num ok">$266.61</td>
+                  </tr>
+                  <tr>
+                    <td>tokpulse-plugin</td>
+                    <td class="num">118.2M</td>
+                    <td class="num">91.1%</td>
+                    <td class="num">$53.60</td>
+                    <td class="num ok">$191.51</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Panel 3: Diagnostics -->
+          <div class="demo-panel" id="panel-diag">
+            <div class="mock-card">
+              <div class="mock-card-head">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span class="mock-grade">89 · A</span>
+                  <span class="mock-card-title" data-i18n="demo.diagHead">Session Efficiency &amp; Cache-Drop Audit</span>
+                </div>
+                <span class="tag-warn" data-i18n="demo.diagDrop">1 Cache Drop Found</span>
+              </div>
+              <div class="mock-tip warn" data-i18n="demo.diagTip1">
+                Step #42: Prefix cache dropped 91% (142K → 12K) after switching mid-thread, adding +$0.24 uncached input.
+              </div>
+              <div class="mock-tip ok" data-i18n="demo.diagTip2">
+                Context window is at 68% — consider running /compact before the next refactor phase.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section id="features" class="section container">
+        <h2 class="section-title" data-i18n="feat.heading">Engineered not to break on every host update.</h2>
+        <div class="feat-grid">
+          <article class="feat-card">
+            <div class="feat-num">01</div>
+            <h3 data-i18n="feat.1.title">100% Official MCP App Architecture</h3>
+            <p data-i18n="feat.1.desc">
+              No remote-debugging port, no Electron DOM injection, and zero host file patching. Opens natively in the side pane, left sidebar full view, or inline in chat.
+            </p>
+          </article>
+          <article class="feat-card">
+            <div class="feat-num">02</div>
+            <h3 data-i18n="feat.2.title">Exact Tokens &amp; Cache Savings</h3>
+            <p data-i18n="feat.2.desc">
+              Reads exact uncached input, cache reads, and output tokens directly from local transcripts, turning abstract numbers into clear USD cost &amp; savings insights.
+            </p>
+          </article>
+          <article class="feat-card">
+            <div class="feat-num">03</div>
+            <h3 data-i18n="feat.3.title">Catch Prefix Cache Drops Early</h3>
+            <p data-i18n="feat.3.desc">
+              Automatically pinpoints the exact turn where prompt caching collapsed, scores session efficiency (0–100), and flags when to run /compact.
+            </p>
+          </article>
+          <article class="feat-card">
+            <div class="feat-num">04</div>
+            <h3 data-i18n="feat.4.title">100% Local-First Privacy</h3>
+            <p data-i18n="feat.4.desc">
+              Prompts, code, and usage ledgers never leave your machine. Built-in 8-language UI follows your Antigravity &amp; OS locale automatically.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Pricing -->
+      <section id="pricing" class="section container">
+        <h2 class="section-title" data-i18n="price.heading">Flexible pricing — start free, or own it forever for $10.99.</h2>
+        <p class="section-sub" data-i18n="price.sub">Start free forever. Try Pro monthly, save with annual, or pay once during early bird for lifetime access on up to 3 devices.</p>
+
+        <div class="price-grid-3">
+          <!-- Free -->
+          <div class="price-card">
+            <div class="price-tier">Free</div>
+            <div class="price-num">$0 <span data-i18n="price.forever">forever</span></div>
+            <ul class="price-list">
+              <li data-i18n="price.f1">Live tok/s speed, avg, peak &amp; turn duration</li>
+              <li data-i18n="price.f2">Waveform &amp; animated Pixel Lion toggle</li>
+              <li data-i18n="price.f3">Entire Antigravity, Auto-follow &amp; single-session scopes</li>
+              <li data-i18n="price.f4">Exact cache hit rate &amp; context window ring</li>
+              <li data-i18n="price.f5">7-day daily usage chart &amp; 8-language UI</li>
+            </ul>
+            <a href="#top" id="freeInstallCta" class="btn-secondary full" data-i18n="price.freeBtn">Install Free via CLI</a>
+          </div>
+
+          <!-- Pro Subscription (Monthly / Yearly toggle) -->
+          <div class="price-card">
+            <div class="price-head-row">
+              <div class="price-tier" data-i18n="price.subTier">Pro Subscription</div>
+              <div class="billing-toggle" role="group" aria-label="Billing cycle">
+                <button type="button" class="bill-btn" data-billing="monthly" data-i18n="price.billMonth">Monthly</button>
+                <button type="button" class="bill-btn active" data-billing="yearly" data-i18n="price.billYear">Yearly</button>
+              </div>
+            </div>
+            <div class="price-num">
+              <span id="subPriceNum">$9.99</span>
+              <span id="subPriceUnit" data-i18n="price.perYear">/ year</span>
+            </div>
+            <div class="price-note" id="subPriceNote" data-i18n="price.yearlySave">Save 58% vs. $1.99/mo · Cancel anytime</div>
+            <ul class="price-list">
+              <li data-i18n="price.p1">Everything in Free, plus:</li>
+              <li data-i18n="price.p2">Equivalent API cost &amp; Cache Savings ($) analytics</li>
+              <li data-i18n="price.p3">Project / Workspace cost breakdown table</li>
+              <li data-i18n="price.p4">Prefix cache-drop audit &amp; /compact alerts (0–100 score)</li>
+              <li data-i18n="price.p5">14-day / Week / Month trends + 14-week heatmap</li>
+              <li data-i18n="price.p6">1-click CSV billing &amp; Markdown report export</li>
+              <li data-i18n="price.p7">Up to 3 devices · 7-day offline grace · Instant deactivation</li>
+            </ul>
+            <a id="proSubCheckoutBtn" href="#pricing" target="_blank" rel="noreferrer" class="btn-secondary full" data-i18n="price.subBtn">Subscribe to Pro</a>
+          </div>
+
+          <!-- Pro Lifetime (Featured Early Bird) -->
+          <div class="price-card featured">
+            <div class="price-head-row">
+              <div class="price-tier" data-i18n="price.lifeTier">Pro Lifetime</div>
+              <span class="tag-accent" data-i18n="price.earlyBadge">Best Value · Early Bird</span>
+            </div>
+            <div class="price-num">
+              <span id="proPriceNum">$10.99</span>
+              <s id="proRegularNum">$12.99</s>
+              <span data-i18n="price.once">one-time</span>
+            </div>
+            <div class="price-note accent" data-i18n="price.lifeAnchor">Just $1 more than 1 year — own Pro forever, no renewals</div>
+            <ul class="price-list">
+              <li data-i18n="price.p1">Everything in Free, plus:</li>
+              <li data-i18n="price.p2">Equivalent API cost &amp; Cache Savings ($) analytics</li>
+              <li data-i18n="price.p3">Project / Workspace cost breakdown table</li>
+              <li data-i18n="price.p4">Prefix cache-drop audit &amp; /compact alerts (0–100 score)</li>
+              <li data-i18n="price.p5">14-day / Week / Month trends + 14-week heatmap</li>
+              <li data-i18n="price.p6">1-click CSV billing &amp; Markdown report export</li>
+              <li data-i18n="price.p7">Up to 3 devices · 7-day offline grace · Instant deactivation</li>
+            </ul>
+            <a id="proCheckoutBtn" href="#pricing" target="_blank" rel="noreferrer" class="btn-primary full" data-i18n="price.proBtn">Buy Lifetime Pro — $10.99</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="section container">
+        <h2 class="section-title" data-i18n="faq.heading">Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <details open>
+            <summary data-i18n="faq.q1">Will TokPulse break when Antigravity updates?</summary>
+            <p data-i18n="faq.a1">
+              No. Unlike legacy debugger-port injectors that break after every auto-update, TokPulse is built exclusively on official MCP Apps, non-blocking lifecycle hooks, and standard local transcript logs.
+            </p>
+          </details>
+          <details>
+            <summary data-i18n="faq.q2">Does TokPulse upload my code or chat history?</summary>
+            <p data-i18n="faq.a2">
+              Never. Free mode makes zero network requests. Pro activation sends only your Polar license key and a one-way SHA-256 device hash to verify your seat limit.
+            </p>
+          </details>
+          <details>
+            <summary data-i18n="faq.q3">How do I move my Pro license to a new Mac or PC?</summary>
+            <p data-i18n="faq.a3">
+              Open the Pro modal inside TokPulse and click Deactivate. Your seat is immediately released on Polar so you can activate another machine.
+            </p>
+          </details>
+          <details>
+            <summary data-i18n="faq.q4">Are the USD cost numbers my actual subscription invoice?</summary>
+            <p data-i18n="faq.a4">
+              They are reference API-rate equivalents calculated from exact local token counts so you can compare project efficiency and see how much prompt caching saves you.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer container">
+      <div>© 2026 <span id="footerAuthor">TokPulse Studio</span> · MIT License</div>
+      <div class="footer-links">
+        <a id="footerRepo" href="https://github.com/jellygor-studio/tokpulse" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/jellygor-studio/tokpulse/blob/main/PRIVACY.md" target="_blank" rel="noreferrer">Privacy</a>
+        <a href="https://github.com/jellygor-studio/tokpulse/blob/main/SECURITY.md" target="_blank" rel="noreferrer">Security</a>
+      </div>
+    </footer>
+
+    <script src="./config.js?v=mwx1llxu"></script>
+    <script src="./app.js?v=mwx1llxu"></script>
+  </body>
+</html>
