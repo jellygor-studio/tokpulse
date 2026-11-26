@@ -1,0 +1,30 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "tokpulse",
+  "displayName": "TokPulse",
+  "version": "1.0.0",
+  "description": "Real-time token speed (tok/s), cache hit & savings calculator, context window gauge, cache-drop diagnostics, project cost breakdown, and CSV/Markdown report export.",
+  "logo": "assets/logo.svg",
+  "author": {
+    "name": "JellyGor Studio",
+    "url": "https://github.com/jellygor-studio"
+  },
+  "homepage": "https://jellygor-studio.github.io/tokpulse",
+  "repository": "https://github.com/jellygor-studio/tokpulse",
+  "license": "MIT",
+  "keywords": [
+    "telemetry",
+    "tokens",
+    "speed",
+    "cache",
+    "cost",
+    "dashboard",
+    "analytics",
+    "mcp-app"
+  ],
+  "suggestedPrompts": [
+    "Open the TokPulse real-time speed and cost dashboard",
+    "Analyze prefix cache drops and optimization tips for this session",
+    "Summarize my token usage and cache savings over the last 7 days"
+  ]
+}
